@@ -1,0 +1,776 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>Python and Javascript</title>
+
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reset.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/theme/black.min.css" id=theme>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+		integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w=="
+		crossorigin="anonymous" />
+
+	<script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.3.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.3.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.3.min.js" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/highlight/monokai.min.css"
+		id="highlight-theme">
+
+	<style>
+		.slow-spinner {
+			-webkit-animation: fa-orbit 6s infinite linear;
+			animation: fa-spin 6s infinite linear;
+		}
+
+		.timeline {
+			white-space: nowrap;
+			overflow-x: hidden;
+			padding-right: 100vw;
+			padding-left: 100px;
+			padding-bottom: 100px;
+			padding-top: 100px;
+		}
+
+		.timeline ol {
+			font-size: 0;
+			width: 100vw;
+			padding: 250px 0;
+			transition: all 1s;
+		}
+
+		.timeline ol li {
+			position: relative;
+			display: inline-block;
+			list-style-type: none;
+			width: 260px;
+			height: 3px;
+			background: #fff;
+		}
+
+		.timeline ol li:last-child {
+			width: 280px;
+		}
+
+		.timeline ol li:not(:first-child) {
+			margin-left: 14px;
+		}
+
+		.timeline ol li:after {
+			content: '';
+			position: absolute;
+			top: 50%;
+			left: calc(0% - 15px);
+			bottom: 0;
+			width: 15px;
+			height: 15px;
+			transform: translateY(-50%);
+			border-radius: 50%;
+			background: #F45B69;
+		}
+
+		.timeline ol li tl-item {
+			position: absolute;
+			left: calc(0% - 7px);
+			width: 280px;
+			padding: 15px;
+			font-size: 1rem;
+			white-space: normal;
+			color: black;
+			background: white;
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.timeline ol li tl-item:hover .hidden {
+			display: block;
+		}
+
+		.timeline ol li tl-item::before {
+			content: '';
+			position: absolute;
+			top: 100%;
+			left: 0;
+			width: 0;
+			height: 0;
+			border-style: solid;
+		}
+
+		.timeline ol li:nth-child(odd) tl-item {
+			top: -16px;
+			transform: translateY(-100%);
+		}
+
+		.timeline ol li:nth-child(odd) tl-item:hover {
+			transform: translateY(-50%);
+		}
+
+		.timeline ol li:nth-child(odd) tl-item::before {
+			top: 100%;
+			border-width: 8px 8px 0 0;
+			border-color: white transparent transparent transparent;
+		}
+
+		.timeline ol li:nth-child(even) tl-item {
+			top: calc(100% + 16px);
+		}
+
+		.timeline ol li:nth-child(even) tl-item:hover {
+			transform: translateY(-50%);
+		}
+
+		.timeline ol li:nth-child(even) tl-item::before {
+			top: -8px;
+			border-width: 8px 0 0 8px;
+			border-color: transparent transparent transparent white;
+		}
+
+		.timeline time {
+			display: block;
+			font-size: 1.2rem;
+			font-weight: bold;
+			margin-bottom: 8px;
+		}
+
+		.timeline li:hover {
+			transform: scale(1.5);
+			z-index: 1;
+		}
+
+		.alert {
+			padding: 15px;
+			margin-bottom: 20px;
+			border: 1px solid transparent;
+			border-radius: 4px;
+		}
+
+		.alert h4 {
+			margin-top: 0;
+			color: inherit;
+		}
+
+		.alert .alert-link {
+			font-weight: bold;
+		}
+
+		.alert>p,
+		.alert>ul {
+			margin-bottom: 0;
+		}
+
+		.alert>p+p {
+			margin-top: 5px;
+		}
+
+		.alert-dismissable,
+		.alert-dismissible {
+			padding-right: 35px;
+		}
+
+		.alert-dismissable .close,
+		.alert-dismissible .close {
+			position: relative;
+			top: -2px;
+			right: -21px;
+			color: inherit;
+		}
+
+		.alert-success {
+			background-color: #dff0d8;
+			border-color: #d6e9c6;
+			color: #3c763d;
+		}
+
+		.alert-success hr {
+			border-top-color: #c9e2b3;
+		}
+
+		.alert-success .alert-link {
+			color: #2b542c;
+		}
+
+		.alert-info {
+			background-color: #d9edf7;
+			border-color: #bce8f1;
+			color: #31708f;
+		}
+
+		.alert-info hr {
+			border-top-color: #a6e1ec;
+		}
+
+		.alert-info .alert-link {
+			color: #245269;
+		}
+
+		.alert-warning {
+			background-color: #fcf8e3;
+			border-color: #faebcc;
+			color: #8a6d3b;
+		}
+
+		.alert-warning hr {
+			border-top-color: #f7e1b5;
+		}
+
+		.alert-warning .alert-link {
+			color: #66512c;
+		}
+
+		.alert-danger {
+			background-color: #f2dede;
+			border-color: #ebccd1;
+			color: #a94442;
+		}
+
+		.alert-danger hr {
+			border-top-color: #e4b9c0;
+		}
+
+		.alert-danger .alert-link {
+			color: #843534;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<section>
+					<h2>
+						Portable Interactive Plotting
+					</h2>
+					<h3 style="color: rgb(176, 176, 176);;;">
+						Python with Javascript Sprinkles
+					</h3>
+					<h4 style="color: grey;">
+						Wesley Banfield
+					</h4>
+					<i class="fab fa-python fa-3x slow-spinner" style="color: dodgerblue;"></i>
+				</section>
+				<section>
+					<h2>
+						Disclaimer
+					</h2>
+					<p>
+						I am by no means a pro here so there are bound to be lots of things overlooked.
+						This is just a collection of some recent experimentations that I though could/would be useful.
+					</p>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>
+						The call of Interactive Graphing
+					</h2>
+				</section>
+				<section>
+					<div class="timeline">
+						<ol>
+							<li>
+								<tl-item>
+									<time>In the Beginning</time>
+									<img src="https://robertheaton.com/images/bpl-examples.png"></img>
+									<div class="hidden">
+										- Limited Visulaizations<br />
+										- Hard to Analyse<br />
+										- Static<br />
+										- Cumbersome to change
+									</div>
+								</tl-item>
+							</li>
+							<li>
+								<tl-item>
+									<time>Graphic Windows</time>
+									<img src="x11.png" style="height: 200px;">
+									<div class="hidden">
+										- Lags<br />
+										- Hard to Analyse<br />
+										- Static<br />
+										- Cumbersome to change
+									</div>
+								</tl-item>
+							</li>
+							<li>
+								<tl-item>
+									<time>Interactive Graphing</time>
+									<script type="text/javascript">
+										(function () {
+											var fn = function () {
+												Bokeh.safely(function () {
+													(function (root) {
+														function embed_document(root) {
+
+															var docs_json = '{"29c6c937-e938-4c2a-906f-4df1bb05cddb":{"roots":{"references":[{"attributes":{"children":[{"id":"1509"},{"id":"1472"}]},"id":"1510","type":"Column"},{"attributes":{"data_source":{"id":"1471"},"glyph":{"id":"1504"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"1505"},"selection_glyph":null,"view":{"id":"1507"}},"id":"1506","type":"GlyphRenderer"},{"attributes":{"below":[{"id":"1481"}],"center":[{"id":"1484"},{"id":"1488"}],"left":[{"id":"1485"}],"plot_height":200,"plot_width":200,"renderers":[{"id":"1506"}],"title":{"id":"1538"},"toolbar":{"id":"1496"},"x_range":{"id":"1473"},"x_scale":{"id":"1477"},"y_range":{"id":"1475"},"y_scale":{"id":"1479"}},"id":"1472","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"1493","type":"ResetTool"},{"attributes":{"end":4,"format":"0[.]00","js_property_callbacks":{"change:value":[{"id":"1508"}]},"start":0.1,"step":0.1,"title":"power","value":1,"width":200},"id":"1509","type":"Slider"},{"attributes":{},"id":"1475","type":"DataRange1d"},{"attributes":{},"id":"1479","type":"LinearScale"},{"attributes":{},"id":"1545","type":"Selection"},{"attributes":{"axis":{"id":"1481"},"ticker":null},"id":"1484","type":"Grid"},{"attributes":{},"id":"1492","type":"SaveTool"},{"attributes":{"bottom_units":"screen","fill_alpha":0.5,"fill_color":"lightgrey","left_units":"screen","level":"overlay","line_alpha":1.0,"line_color":"black","line_dash":[4,4],"line_width":2,"right_units":"screen","top_units":"screen"},"id":"1495","type":"BoxAnnotation"},{"attributes":{"formatter":{"id":"1540"},"ticker":{"id":"1482"}},"id":"1481","type":"LinearAxis"},{"attributes":{"line_alpha":0.1,"line_color":"#1f77b4","line_width":3,"x":{"field":"x"},"y":{"field":"y"}},"id":"1505","type":"Line"},{"attributes":{},"id":"1494","type":"HelpTool"},{"attributes":{},"id":"1482","type":"BasicTicker"},{"attributes":{"formatter":{"id":"1542"},"ticker":{"id":"1486"}},"id":"1485","type":"LinearAxis"},{"attributes":{"args":{"source":{"id":"1471"}},"code":"\\n    var data = source.data;\\n    var f = cb_obj.value\\n    var x = data[&#x27;x&#x27;]\\n    var y = data[&#x27;y&#x27;]\\n    for (var i = 0; i &lt; x.length; i++) {\\n        y[i] = Math.pow(x[i], f)\\n    }\\n    source.change.emit();\\n"},"id":"1508","type":"CustomJS"},{"attributes":{},"id":"1490","type":"WheelZoomTool"},{"attributes":{},"id":"1473","type":"DataRange1d"},{"attributes":{},"id":"1489","type":"PanTool"},{"attributes":{"data":{"x":[0.0,0.005,0.01,0.015,0.02,0.025,0.03,0.035,0.04,0.045,0.05,0.055,0.06,0.065,0.07,0.075,0.08,0.085,0.09,0.095,0.1,0.105,0.11,0.115,0.12,0.125,0.13,0.135,0.14,0.145,0.15,0.155,0.16,0.165,0.17,0.17500000000000002,0.18,0.185,0.19,0.195,0.2,0.20500000000000002,0.21,0.215,0.22,0.225,0.23,0.23500000000000001,0.24,0.245,0.25,0.255,0.26,0.265,0.27,0.275,0.28,0.28500000000000003,0.29,0.295,0.3,0.305,0.31,0.315,0.32,0.325,0.33,0.335,0.34,0.34500000000000003,0.35000000000000003,0.355,0.36,0.365,0.37,0.375,0.38,0.385,0.39,0.395,0.4,0.405,0.41000000000000003,0.41500000000000004,0.42,0.425,0.43,0.435,0.44,0.445,0.45,0.455,0.46,0.465,0.47000000000000003,0.47500000000000003,0.48,0.485,0.49,0.495,0.5,0.505,0.51,0.515,0.52,0.525,0.53,0.535,0.54,0.545,0.55,0.555,0.56,0.5650000000000001,0.5700000000000001,0.5750000000000001,0.58,0.585,0.59,0.595,0.6,0.605,0.61,0.615,0.62,0.625,0.63,0.635,0.64,0.645,0.65,0.655,0.66,0.665,0.67,0.675,0.68,0.685,0.6900000000000001,0.6950000000000001,0.7000000000000001,0.705,0.71,0.715,0.72,0.725,0.73,0.735,0.74,0.745,0.75,0.755,0.76,0.765,0.77,0.775,0.78,0.785,0.79,0.795,0.8,0.805,0.81,0.8150000000000001,0.8200000000000001,0.8250000000000001,0.8300000000000001,0.835,0.84,0.845,0.85,0.855,0.86,0.865,0.87,0.875,0.88,0.885,0.89,0.895,0.9,0.905,0.91,0.915,0.92,0.925,0.93,0.935,0.9400000000000001,0.9450000000000001,0.9500000000000001,0.9550000000000001,0.96,0.965,0.97,0.975,0.98,0.985,0.99,0.995],"y":[0.0,0.005,0.01,0.015,0.02,0.025,0.03,0.035,0.04,0.045,0.05,0.055,0.06,0.065,0.07,0.075,0.08,0.085,0.09,0.095,0.1,0.105,0.11,0.115,0.12,0.125,0.13,0.135,0.14,0.145,0.15,0.155,0.16,0.165,0.17,0.17500000000000002,0.18,0.185,0.19,0.195,0.2,0.20500000000000002,0.21,0.215,0.22,0.225,0.23,0.23500000000000001,0.24,0.245,0.25,0.255,0.26,0.265,0.27,0.275,0.28,0.28500000000000003,0.29,0.295,0.3,0.305,0.31,0.315,0.32,0.325,0.33,0.335,0.34,0.34500000000000003,0.35000000000000003,0.355,0.36,0.365,0.37,0.375,0.38,0.385,0.39,0.395,0.4,0.405,0.41000000000000003,0.41500000000000004,0.42,0.425,0.43,0.435,0.44,0.445,0.45,0.455,0.46,0.465,0.47000000000000003,0.47500000000000003,0.48,0.485,0.49,0.495,0.5,0.505,0.51,0.515,0.52,0.525,0.53,0.535,0.54,0.545,0.55,0.555,0.56,0.5650000000000001,0.5700000000000001,0.5750000000000001,0.58,0.585,0.59,0.595,0.6,0.605,0.61,0.615,0.62,0.625,0.63,0.635,0.64,0.645,0.65,0.655,0.66,0.665,0.67,0.675,0.68,0.685,0.6900000000000001,0.6950000000000001,0.7000000000000001,0.705,0.71,0.715,0.72,0.725,0.73,0.735,0.74,0.745,0.75,0.755,0.76,0.765,0.77,0.775,0.78,0.785,0.79,0.795,0.8,0.805,0.81,0.8150000000000001,0.8200000000000001,0.8250000000000001,0.8300000000000001,0.835,0.84,0.845,0.85,0.855,0.86,0.865,0.87,0.875,0.88,0.885,0.89,0.895,0.9,0.905,0.91,0.915,0.92,0.925,0.93,0.935,0.9400000000000001,0.9450000000000001,0.9500000000000001,0.9550000000000001,0.96,0.965,0.97,0.975,0.98,0.985,0.99,0.995]},"selected":{"id":"1545"},"selection_policy":{"id":"1544"}},"id":"1471","type":"ColumnDataSource"},{"attributes":{},"id":"1486","type":"BasicTicker"},{"attributes":{"overlay":{"id":"1495"}},"id":"1491","type":"BoxZoomTool"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"1489"},{"id":"1490"},{"id":"1491"},{"id":"1492"},{"id":"1493"},{"id":"1494"}]},"id":"1496","type":"Toolbar"},{"attributes":{"axis":{"id":"1485"},"dimension":1,"ticker":null},"id":"1488","type":"Grid"},{"attributes":{"text":""},"id":"1538","type":"Title"},{"attributes":{},"id":"1477","type":"LinearScale"},{"attributes":{},"id":"1540","type":"BasicTickFormatter"},{"attributes":{"line_alpha":0.6,"line_color":"#1f77b4","line_width":3,"x":{"field":"x"},"y":{"field":"y"}},"id":"1504","type":"Line"},{"attributes":{"source":{"id":"1471"}},"id":"1507","type":"CDSView"},{"attributes":{},"id":"1542","type":"BasicTickFormatter"},{"attributes":{},"id":"1544","type":"UnionRenderers"}],"root_ids":["1510"]},"title":"Bokeh Application","version":"2.2.3"}}';
+															var render_items = [{ "docid": "29c6c937-e938-4c2a-906f-4df1bb05cddb", "root_ids": ["1510"], "roots": { "1510": "31101bcb-5eec-45ce-871a-105849256384" } }];
+															root.Bokeh.embed.embed_items(docs_json, render_items);
+
+														}
+														if (root.Bokeh !== undefined) {
+															embed_document(root);
+														} else {
+															var attempts = 0;
+															var timer = setInterval(function (root) {
+																if (root.Bokeh !== undefined) {
+																	clearInterval(timer);
+																	embed_document(root);
+																} else {
+																	attempts++;
+																	if (attempts > 100) {
+																		clearInterval(timer);
+																		console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+																	}
+																}
+															}, 10, root)
+														}
+													})(window);
+												});
+											};
+											if (document.readyState != "loading") fn();
+											else document.addEventListener("DOMContentLoaded", fn);
+										})();
+									</script>
+									<div class="bk-root" id="31101bcb-5eec-45ce-871a-105849256384" data-root-id="1510">
+									</div>
+									<div class="hidden">
+										<br />
+										- Less code / iterations<br />
+										- Easier Explorations
+									</div>
+								</tl-item>
+							</li>
+						</ol>
+					</div>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>
+						But how do we collaborate?
+					</h2>
+				</section>
+				<section data-auto-animate>
+					<h2>
+						Sharing Methods Standard Jupyter
+					</h2>
+				</section>
+				<section data-auto-animate>
+					<h2>
+						Sharing Methods
+					</h2>
+					<ul>
+						<li>
+							Passing a notebook file around
+						</li>
+						<ul class="fragment">
+							<li>
+								Need a notebook server
+								<div class="alert alert-warning" style="font-size: 14px;">
+									Can need to rerun → not reproducible + needs data
+								</div>
+								<div class="alert alert-info" style="font-size: 14px;">
+									It is possible to embed widget state with JupyterLab Settings → Save Widget State
+									Automatically
+								</div>
+							</li>
+						</ul>
+						<li class="fragment">
+							Jupyter → Export as ...
+						</li>
+						<ul>
+							<li class='fragment'>
+								Exports whole notebook
+							</li>
+							<li class='fragment'>
+								No Backend
+								<ul>
+									<li>
+										Basic interactivity works
+										<div class="alert alert-warning" style="font-size: 14px;">
+											Matplotib widgets don't seem to work for example
+										</div>
+									</li>
+									<li>
+										No <emph>Complex</emph> interactivity
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<h2>
+						So why use Python + javascript?
+					</h2>
+					<div data-id="box"
+						style="display:flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+						<i class="fab fa-python fa-3x" style="color: dodgerblue;"></i>
+						<i class="fas fa-plus fa-2x" style="margin: 50px;"></i>
+						<i class="fab fa-js-square fa-3x" style="color: #F0DB4F;"></i>
+					</div>
+				</section>
+				<section data-auto-animate>
+					<div data-id="box"
+						style="display:flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+						<i class="fab fa-python fa-2x" style="color: dodgerblue;"></i>
+						<i class="fas fa-plus fa-1x" style="margin: 50px;"></i>
+						<i class="fab fa-js-square fa-2x" style="color: #F0DB4F;"></i>
+					</div>
+					<ul>
+						<li class="fragment">
+							Export graphs rather than notebooks - Portable complex interactivity
+							<div style="display: grid; grid-template-columns: 35vw 35vw;">
+								<ul class="fragment" style="grid-column-start: 1;">
+									<li>
+										Standalone graphs that run everywhere
+										<ul>
+											<li>
+												Presentations
+											</li>
+											<li>
+												Documents
+											</li>
+											<li>
+												(Static) Websites
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<span class="fragment fade-in-then-out" style="grid-column-start: 2;grid-row-start: 1;">
+									<script type="text/javascript">
+										(function () {
+											var fn = function () {
+												Bokeh.safely(function () {
+													(function (root) {
+														function embed_document(root) {
+
+															var docs_json = '{"7189b264-4784-45b4-8e89-305939957335":{"roots":{"references":[{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"2981"},{"id":"2999"},{"id":"3000"},{"id":"3001"},{"id":"3002"},{"id":"3003"}]},"id":"3005","type":"Toolbar"},{"attributes":{"overlay":{"id":"3004"}},"id":"3002","type":"BoxZoomTool"},{"attributes":{},"id":"3003","type":"ResetTool"},{"attributes":{"source":{"id":"3012"}},"id":"3019","type":"CDSView"},{"attributes":{"axis_label":"y","bounds":"auto","formatter":{"id":"3022"},"major_label_orientation":"horizontal","ticker":{"id":"2996"}},"id":"2995","type":"LinearAxis"},{"attributes":{"line_color":"#30a2da","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"3015","type":"Line"},{"attributes":{"data_source":{"id":"3012"},"glyph":{"id":"3015"},"hover_glyph":null,"muted_glyph":{"id":"3017"},"nonselection_glyph":{"id":"3016"},"selection_glyph":null,"view":{"id":"3019"}},"id":"3018","type":"GlyphRenderer"},{"attributes":{},"id":"2987","type":"LinearScale"},{"attributes":{},"id":"3020","type":"BasicTickFormatter"},{"attributes":{},"id":"2992","type":"BasicTicker"},{"attributes":{},"id":"2996","type":"BasicTicker"},{"attributes":{"axis":{"id":"2991"},"grid_line_color":null,"ticker":null},"id":"2994","type":"Grid"},{"attributes":{"axis_label":"x","bounds":"auto","formatter":{"id":"3020"},"major_label_orientation":"horizontal","ticker":{"id":"2992"}},"id":"2991","type":"LinearAxis"},{"attributes":{},"id":"3000","type":"PanTool"},{"attributes":{"end":1.0273788918483762,"reset_end":1.0273788918483762,"reset_start":0.060912422725633394,"start":0.060912422725633394,"tags":[[["y","y",null]]]},"id":"2980","type":"Range1d"},{"attributes":{"text":""},"id":"2983","type":"Title"},{"attributes":{"below":[{"id":"2991"}],"center":[{"id":"2994"},{"id":"2998"}],"left":[{"id":"2995"}],"margin":[5,5,5,5],"min_border_bottom":10,"min_border_left":10,"min_border_right":10,"min_border_top":10,"plot_height":300,"plot_width":300,"renderers":[{"id":"3018"}],"sizing_mode":"fixed","title":{"id":"2983"},"toolbar":{"id":"3005"},"x_range":{"id":"2979"},"x_scale":{"id":"2987"},"y_range":{"id":"2980"},"y_scale":{"id":"2989"}},"id":"2982","subtype":"Figure","type":"Plot"},{"attributes":{},"id":"3030","type":"UnionRenderers"},{"attributes":{"children":[{"id":"2982"}],"margin":[0,0,0,0],"name":"Row05197"},"id":"2978","type":"Row"},{"attributes":{},"id":"3022","type":"BasicTickFormatter"},{"attributes":{},"id":"2989","type":"LinearScale"},{"attributes":{"end":9.0,"reset_end":9.0,"reset_start":0.0,"tags":[[["x","x",null]]]},"id":"2979","type":"Range1d"},{"attributes":{"data":{"x":{"__ndarray__":"AAAAAAAAAAAAAAAAAADwPwAAAAAAAABAAAAAAAAACEAAAAAAAAAQQAAAAAAAABRAAAAAAAAAGEAAAAAAAAAcQAAAAAAAACBAAAAAAAAAIkA=","dtype":"float64","order":"little","shape":[10]},"y":{"__ndarray__":"QncofGMa2z8QF1R3ExvCP4P7lQtAheA/pFXn8bM00T9Osr5wg0zuP4bMtpIwjNc/4i1VLf4T6T8BO51WkLnkP1beKffzueE/pO9FD06a5D8=","dtype":"float64","order":"little","shape":[10]}},"selected":{"id":"3013"},"selection_policy":{"id":"3030"}},"id":"3012","type":"ColumnDataSource"},{"attributes":{},"id":"3013","type":"Selection"},{"attributes":{},"id":"3001","type":"WheelZoomTool"},{"attributes":{"bottom_units":"screen","fill_alpha":0.5,"fill_color":"lightgrey","left_units":"screen","level":"overlay","line_alpha":1.0,"line_color":"black","line_dash":[4,4],"line_width":2,"right_units":"screen","top_units":"screen"},"id":"3004","type":"BoxAnnotation"},{"attributes":{"line_alpha":0.1,"line_color":"#30a2da","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"3016","type":"Line"},{"attributes":{},"id":"2999","type":"SaveTool"},{"attributes":{"callback":null,"renderers":[{"id":"3018"}],"tags":["hv_created"],"tooltips":[["x","@{x}"],["y","@{y}"]]},"id":"2981","type":"HoverTool"},{"attributes":{"axis":{"id":"2995"},"dimension":1,"grid_line_color":null,"ticker":null},"id":"2998","type":"Grid"},{"attributes":{"line_alpha":0.2,"line_color":"#30a2da","line_width":2,"x":{"field":"x"},"y":{"field":"y"}},"id":"3017","type":"Line"}],"root_ids":["2978"]},"title":"Bokeh Application","version":"2.2.3"}}';
+															var render_items = [{ "docid": "7189b264-4784-45b4-8e89-305939957335", "root_ids": ["2978"], "roots": { "2978": "43b47faa-5c29-45a7-b86a-96d6197d3bdf" } }];
+															root.Bokeh.embed.embed_items(docs_json, render_items);
+
+														}
+														if (root.Bokeh !== undefined) {
+															embed_document(root);
+														} else {
+															var attempts = 0;
+															var timer = setInterval(function (root) {
+																if (root.Bokeh !== undefined) {
+																	clearInterval(timer);
+																	embed_document(root);
+																} else {
+																	attempts++;
+																	if (attempts > 100) {
+																		clearInterval(timer);
+																		console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+																	}
+																}
+															}, 10, root)
+														}
+													})(window);
+												});
+											};
+											if (document.readyState != "loading") fn();
+											else document.addEventListener("DOMContentLoaded", fn);
+										})();
+									</script>
+									<div class="bk-root" id="43b47faa-5c29-45a7-b86a-96d6197d3bdf" data-root-id="2978">
+									</div>
+								</span>
+								<span class="fragment fade-in-then-out"
+									style="grid-column-start: 2; grid-row-start: 1;">
+									<iframe src="https://curvenote.com/@wesley/cerege/interactive-plots-simple-example"
+										style="width: 90%; height: 40vh;background-color: white;  margin-left: 50px"></iframe>
+								</span>
+								<span class="fragment fade-in" style="grid-column-start: 2; grid-row-start: 1;">
+									<iframe src="http://localhost:5000/6/routing/view?"
+										style="width: 90%; height: 40vh;background-color: white; margin-left: 50px;"></iframe>
+								</span>
+							</div>
+							</span>
+					</ul>
+				</section>
+				<section data-auto-animate>
+					<div data-id="box"
+						style="display:flex; align-items: center; justify-content: center; flex-wrap: wrap;">
+						<i class="fab fa-python fa-2x" style="color: dodgerblue;"></i>
+						<i class="fas fa-plus fa-1x" style="margin: 50px;"></i>
+						<i class="fab fa-js-square fa-2x" style="color: #F0DB4F;"></i>
+					</div>
+					<ul>
+						<li>
+							Reproducible graphs
+						</li>
+						<li class="fragment">
+							Custom Interactivity
+							<div>
+								<textarea id='plotly-text-area'
+									style="opacity: 0.1; height: 0px; z-index: -1; position: absolute;">
+
+								</textarea>
+								<div>
+									<div id="31bdb3b2-e7da-4412-ae88-2cb54cf4923e" class="plotly-graph-div"
+										style="height:300px; width:600px;"></div>
+									<script
+										type="text/javascript">                                    window.PLOTLYENV = window.PLOTLYENV || {}; if (document.getElementById("31bdb3b2-e7da-4412-ae88-2cb54cf4923e")) { Plotly.newPlot("31bdb3b2-e7da-4412-ae88-2cb54cf4923e", [{ "mode": "markers", "type": "scatter", "x": [-1.0558269999682477, 0.8097561446708228, 0.38620061386379784, 1.6031244939942135, -1.9052503702324777, 0.8064017332478085, 0.08817103232193392, -1.6139069251436104, 0.2703335738203933, -0.029384007057292775], "y": [0.8204804578213142, 0.02272572631441004, 0.14191357822792106, 0.3823343718126602, -0.9429001909177742, -0.46958722718828255, -0.10320135961083539, -0.24115706426505165, 0.4523641046336094, 0.5765872008875673] }], { "height": 300, "margin": { "b": 0, "l": 0, "r": 0, "t": 0 }, "template": { "data": { "bar": [{ "error_x": { "color": "#2a3f5f" }, "error_y": { "color": "#2a3f5f" }, "marker": { "line": { "color": "#E5ECF6", "width": 0.5 } }, "type": "bar" }], "barpolar": [{ "marker": { "line": { "color": "#E5ECF6", "width": 0.5 } }, "type": "barpolar" }], "carpet": [{ "aaxis": { "endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f" }, "baxis": { "endlinecolor": "#2a3f5f", "gridcolor": "white", "linecolor": "white", "minorgridcolor": "white", "startlinecolor": "#2a3f5f" }, "type": "carpet" }], "choropleth": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "type": "choropleth" }], "contour": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "contour" }], "contourcarpet": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "type": "contourcarpet" }], "heatmap": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmap" }], "heatmapgl": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "heatmapgl" }], "histogram": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "histogram" }], "histogram2d": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2d" }], "histogram2dcontour": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "histogram2dcontour" }], "mesh3d": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "type": "mesh3d" }], "parcoords": [{ "line": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "parcoords" }], "pie": [{ "automargin": true, "type": "pie" }], "scatter": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scatter" }], "scatter3d": [{ "line": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scatter3d" }], "scattercarpet": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scattercarpet" }], "scattergeo": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scattergeo" }], "scattergl": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scattergl" }], "scattermapbox": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scattermapbox" }], "scatterpolar": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scatterpolar" }], "scatterpolargl": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scatterpolargl" }], "scatterternary": [{ "marker": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "type": "scatterternary" }], "surface": [{ "colorbar": { "outlinewidth": 0, "ticks": "" }, "colorscale": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "type": "surface" }], "table": [{ "cells": { "fill": { "color": "#EBF0F8" }, "line": { "color": "white" } }, "header": { "fill": { "color": "#C8D4E3" }, "line": { "color": "white" } }, "type": "table" }] }, "layout": { "annotationdefaults": { "arrowcolor": "#2a3f5f", "arrowhead": 0, "arrowwidth": 1 }, "autotypenumbers": "strict", "coloraxis": { "colorbar": { "outlinewidth": 0, "ticks": "" } }, "colorscale": { "diverging": [[0, "#8e0152"], [0.1, "#c51b7d"], [0.2, "#de77ae"], [0.3, "#f1b6da"], [0.4, "#fde0ef"], [0.5, "#f7f7f7"], [0.6, "#e6f5d0"], [0.7, "#b8e186"], [0.8, "#7fbc41"], [0.9, "#4d9221"], [1, "#276419"]], "sequential": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]], "sequentialminus": [[0.0, "#0d0887"], [0.1111111111111111, "#46039f"], [0.2222222222222222, "#7201a8"], [0.3333333333333333, "#9c179e"], [0.4444444444444444, "#bd3786"], [0.5555555555555556, "#d8576b"], [0.6666666666666666, "#ed7953"], [0.7777777777777778, "#fb9f3a"], [0.8888888888888888, "#fdca26"], [1.0, "#f0f921"]] }, "colorway": ["#636efa", "#EF553B", "#00cc96", "#ab63fa", "#FFA15A", "#19d3f3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"], "font": { "color": "#2a3f5f" }, "geo": { "bgcolor": "white", "lakecolor": "white", "landcolor": "#E5ECF6", "showlakes": true, "showland": true, "subunitcolor": "white" }, "hoverlabel": { "align": "left" }, "hovermode": "closest", "mapbox": { "style": "light" }, "paper_bgcolor": "white", "plot_bgcolor": "#E5ECF6", "polar": { "angularaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "bgcolor": "#E5ECF6", "radialaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" } }, "scene": { "xaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white" }, "yaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white" }, "zaxis": { "backgroundcolor": "#E5ECF6", "gridcolor": "white", "gridwidth": 2, "linecolor": "white", "showbackground": true, "ticks": "", "zerolinecolor": "white" } }, "shapedefaults": { "line": { "color": "#2a3f5f" } }, "ternary": { "aaxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "baxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" }, "bgcolor": "#E5ECF6", "caxis": { "gridcolor": "white", "linecolor": "white", "ticks": "" } }, "title": { "x": 0.05 }, "xaxis": { "automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": { "standoff": 15 }, "zerolinecolor": "white", "zerolinewidth": 2 }, "yaxis": { "automargin": true, "gridcolor": "white", "linecolor": "white", "ticks": "", "title": { "standoff": 15 }, "zerolinecolor": "white", "zerolinewidth": 2 } } }, "width": 600 }, { "responsive": true }) };                            </script>
+								</div>
+								<script>
+									var myDiv = document.getElementById('31bdb3b2-e7da-4412-ae88-2cb54cf4923e');
+									myDiv.on('plotly_click',
+										function (eventdata) {
+											var el = document.getElementById("plotly-text-area");
+											el.value = eventdata.points[0].pointNumber
+											el.select();
+											document.execCommand('copy');
+											alert("You clicked on Point " + eventdata.points[0].pointNumber);
+											console.log(eventdata)
+										}
+									);
+								</script>
+								<textarea>
+
+								</textarea>
+							</div>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>
+						How do we add custom interactivity in standalone file?
+					</h2>
+				</section>
+				<section>
+					<ul>
+						<li>
+							Some (Most? All?) Interactive Python libraries are javascript backed
+						</li>
+						<li class="fragment">
+							Complex interactivity generally occurs through relying on Python to update data
+						</li>
+						<li class="fragment">
+							What if those changes could be made in JavaScript?
+							<ul>
+								<li class="fragment">
+									Pure Maths
+								</li>
+								<li class="fragment">
+									Inject precomputed data
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section data-visibility="hidden">
+					<p>
+						Most interactive graphing tools are somehow based on JavaScript but still rely on a python
+						backend for more flexible complex compute (and generally default to this when availible?)
+					</p>
+					<p style="margin-top: 3em;">
+						These libraries generally provide a method for creating the div and scripts associated which
+						we can harness and modify
+					</p>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>
+						Examples
+					</h2>
+				</section>
+				<section data-auto-animate>
+					<h2>
+						Bokeh
+					</h2>
+					Built in functionality
+					<ol>
+						<li class="fragment">
+							Create `ColumnDataSource` that holds the data
+						</li>
+						<li class="fragment">
+							Create a plot
+						</li>
+						<li class="fragment">
+							Add Callback
+						</li>
+					</ol>
+				</section>
+				<section data-auto-animate>
+					<h2>
+						Bokeh
+					</h2>
+					<p>
+						<a href="https://curvenote.com/@prisae/toyprojects/impulseresponseoverhalfspace">
+							Dieter Werthmüller - Impulse response over resistive halfspace
+						</a>
+					</p>
+					<iframe src="https://curvenote.com/@prisae/toyprojects/!NOaWFsYyt7dT5Tv00f9c" style="height: 60vh; width: 60vw; background-color: white;"></iframe>
+				</section>
+				<section data-auto-animate>
+					<h2>
+						Bokeh
+					</h2>
+					<div>
+						<pre>
+							<code data-line-numbers="2|12|15-38|18-19|29-35|36|41,44|47,56" type="text/template">from bokeh.layouts import column
+from bokeh.models import ColumnDataSource, CustomJS, Slider, Title
+from bokeh.plotting import Figure
+import numpy as np
+import empymod
+
+time = np.logspace(-3, 1, 301)
+epminp = {'src': (0, 0, 0), 'rec': (3000, 0, 0), 'freqtime': time,
+          'solution': 'dhs', 'signal': 0, 'verb': 1}
+efield = empymod.analytical(res=50, **epminp)
+
+source = ColumnDataSource(data=dict(time=time, efield=efield))
+
+# Create callback
+callback = CustomJS(
+    args=dict(source=source),
+    code="""
+        var data = source.data;
+        var res = cb_obj.value
+        var time = data['time']
+        var efield = data['efield']
+        var tau = data['tau']
+        var off = 3000
+        var mu0 = 4*Math.PI*1e-7
+        var tau = 0
+        var fact1 = 0
+        var fact2 = 0
+        var fact3 = 0
+        for (var i = 0; i < time.length; i++) {
+            tau = Math.sqrt(mu0 * Math.pow(off, 2) / (res * time[i]));
+            fact1 = res / (2 * Math.PI * Math.pow(off, 3));
+            fact2 = Math.pow(tau, 3) / (4 * time[i] * Math.sqrt(Math.PI));
+            fact3 = Math.exp(- Math.pow(tau, 2)/4);
+            efield[i] = fact1 * fact2 * fact3;
+        }
+        source.change.emit();
+    """
+)
+
+# Create slider
+slider = Slider(start=1, end=100, value=49, step=1, title="Resistivity (Ohm.m)")
+
+# Attach callback to slider
+slider.js_on_change('value', callback)
+
+# Create figure
+p = Figure(plot_width=600, plot_height=400, x_axis_type="log",
+                       tools='pan,wheel_zoom,box_zoom,reset, hover')
+
+# Plot empymod-responses for QC
+for r in [1, 25, 50, 75, 100]:
+    epm = empymod.analytical(res=r, **epminp)
+    p.line(time, epm, line_color='black', line_width=1)
+    
+# Plot interactive JS result
+p.line('time', 'efield', source=source, line_width=3, line_alpha=0.6)
+
+p.add_layout(Title(text='Impulse response over a halfspace', align="center"), "above")
+p.xaxis.axis_label = "Time (s)"
+p.yaxis.axis_label = "Amplitude (V/m)"
+
+# Creaty layout and show
+layout = column(p, slider)</code>
+								</pre>
+					</div>
+				</section>
+				<section data-auto-animate>
+					<h2 data-id="new-header">
+						Plotly (Generic??)
+					</h2>
+					Post-processing
+					<div class="alert alert-info" style="font-size: 14px;">
+						Not a pro here!!!
+						<br />
+						Seems like using Dash is the way to go for similar interactivity but not sure how
+						to get that working without a server.
+						<br />
+						Find someone more appropriate!!!
+					</div>
+					<ol>
+						<li class="fragment">
+							Create traces / data
+						</li>
+						<li class="fragment">
+							Plot Data with <code>output_type='div'</code>
+						</li>
+						<li class="fragment">
+							Link custom javascript
+						</li>
+					</ol>
+				</section>
+				<section data-auto-animate>
+					<h2 data-id="new-header">
+						Plotly
+					</h2>
+					<pre>
+						<code data-line-numbers="4-6,8|11|13|16-26|29" data-trim type="text/template">import plotly.graph_objs as go
+from plotly.offline import plot
+
+trace = go.Scatter(
+    ...
+)
+
+data = [trace]
+
+# get the a div
+div = plot(data, include_plotlyjs=False, output_type='div')
+# retrieve the div id (you probably want to do something smarter here with beautifulsoup)
+div_id = div.split('=')[1].split()[0].replace("'", "").replace('"', '')
+
+# your custom JS code
+js = '''
+    <script>
+		var myDiv = document.getElementById('{div_id}');
+		myDiv.on('plotly_click',
+			function (eventdata) {
+				{
+					console.log(eventdata)
+				}
+			}
+		);
+	</script>'''.format(div_id=div_id)
+
+# merge everything
+div = div + js
+						</code>
+					</pre>
+				</section>
+			</section>
+		</div>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/markdown/markdown.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/dist/reveal.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/notes/notes.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.1.0/plugin/highlight/highlight.min.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			// hash: true,
+			// autoSlide: 1500,
+			// loop: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+</body>
+
+</html>
