@@ -3,6 +3,9 @@ Talk at Swung RendezVous
 
 # Take away
 There are many ways to create python servers but this can be overkill. Adding simple javascript sprinkles to python code can allow you to easily export and share you figures in html code.
+## Tips
+1. Using Bokeh seems easiest!
+1. Use `bokeh.embed.components` to get the scrpit and div of the plot
 
 # Ressources
 Reveal js in a single file stub: https://github.com/WesleyTheGeolien/revealjs_single_file (for using bokeh remember to import the relevant scripts https://docs.bokeh.org/en/latest/docs/user_guide/embed.html#components)
